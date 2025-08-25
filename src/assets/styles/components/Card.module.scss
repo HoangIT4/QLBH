@@ -1,0 +1,261 @@
+@use '../variables' as vars;
+@use '../mixins' as mixins;
+
+.card {
+    background: vars.$surface-color;
+    @include mixins.radius_common(vars.$border-radius-md);
+    @include mixins.shadow('sm');
+    @include mixins.transition();
+    overflow: hidden;
+
+    &:hover {
+        @include mixins.shadow('md');
+        transform: translateY(-2px);
+    }
+
+    &.clickable {
+        cursor: pointer;
+    }
+
+    &.bordered {
+        border: 1px solid rgba(vars.$text-disabled, 0.3);
+    }
+
+    &.elevated {
+        @include mixins.shadow('md');
+
+        &:hover {
+            @include mixins.shadow('lg');
+            transform: translateY(-4px);
+        }
+    }
+}
+
+.cardHeader {
+    padding: vars.$spacing-lg vars.$spacing-lg vars.$spacing-md;
+    border-bottom: 1px solid rgba(vars.$text-disabled, 0.1);
+
+    .title {
+        font-size: 1.25rem;
+        font-weight: 600;
+        color: vars.$text-primary;
+        margin: 0 0 vars.$spacing-xs 0;
+    }
+
+    .subtitle {
+        font-size: 0.875rem;
+        color: vars.$text-secondary;
+        margin: 0;
+    }
+
+    &.noBorder {
+        border-bottom: none;
+        padding-bottom: vars.$spacing-lg;
+    }
+}
+
+.cardContent {
+    padding: vars.$spacing-lg;
+
+    &.compact {
+        padding: vars.$spacing-md;
+    }
+
+    &.spacious {
+        padding: vars.$spacing-xl;
+    }
+
+    p:last-child {
+        margin-bottom: 0;
+    }
+}
+
+.cardActions {
+    padding: vars.$spacing-sm vars.$spacing-lg vars.$spacing-lg;
+    @include mixins.flex_box_custom(space-between, center, vars.$spacing-sm);
+
+    &.center {
+        justify-content: center;
+    }
+
+    &.start {
+        justify-content: flex-start;
+    }
+
+    &.between {
+        justify-content: space-between;
+    }
+}
+
+.cardImage {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+
+    &.small {
+        height: 150px;
+    }
+
+    &.large {
+        height: 300px;
+    }
+}
+
+// Product Card specific styles
+.productCard {
+    @extend .card;
+    max-width: 350px;
+
+    .productImage {
+        @extend .cardImage;
+        height: 180px;
+    }
+
+    .productInfo {
+        padding: vars.$spacing-md;
+
+        .productName {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: vars.$text-primary;
+            margin: 0 0 vars.$spacing-xs 0;
+            line-height: 1.3;
+        }
+
+        .productDescription {
+            font-size: 0.875rem;
+            color: vars.$text-secondary;
+            margin: 0 0 vars.$spacing-md 0;
+            line-height: 1.4;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .productPrice {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: vars.$error-color;
+            margin: 0 0 vars.$spacing-xs 0;
+        }
+
+        .productMeta {
+            @include mixins.flex_box_custom(space-between, center);
+            font-size: 0.75rem;
+            color: vars.$text-disabled;
+
+            .stock {
+                &.inStock {
+                    color: vars.$success-color;
+                }
+
+                &.lowStock {
+                    color: vars.$warning-color;
+                }
+
+                &.outOfStock {
+                    color: vars.$error-color;
+                }
+            }
+        }
+    }
+
+    .productActions {
+        padding: vars.$spacing-sm vars.$spacing-md vars.$spacing-md;
+
+        .addToCartBtn {
+            width: 100%;
+            @include mixins.button_primary;
+
+            &:disabled {
+                background-color: vars.$text-disabled;
+                cursor: not-allowed;
+
+                &:hover {
+                    transform: none;
+                    box-shadow: none;
+                }
+            }
+        }
+    }
+}
+
+// Order Card specific styles
+.orderCard {
+    @extend .card;
+
+    .orderHeader {
+        @include mixins.flex_box_custom(space-between, center);
+        padding: vars.$spacing-md;
+        background: rgba(vars.$primary-color, 0.05);
+
+        .orderNumber {
+            font-weight: 600;
+            color: vars.$text-primary;
+        }
+
+        .orderStatus {
+            padding: vars.$spacing-xs vars.$spacing-sm;
+            @include mixins.radius_common(vars.$border-radius-xl);
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+
+            &.pending {
+                background: rgba(vars.$warning-color, 0.1);
+                color: darken(vars.$warning-color, 20%);
+            }
+
+            &.delivered {
+                background: rgba(vars.$success-color, 0.1);
+                color: darken(vars.$success-color, 20%);
+            }
+
+            &.cancelled {
+                background: rgba(vars.$error-color, 0.1);
+                color: darken(vars.$error-color, 20%);
+            }
+        }
+    }
+
+    .orderItems {
+        padding: vars.$spacing-md;
+
+        .orderItem {
+            @include mixins.flex_box_custom(space-between, center);
+            padding: vars.$spacing-xs 0;
+
+            &:not(:last-child) {
+                border-bottom: 1px solid rgba(vars.$text-disabled, 0.1);
+            }
+
+            .itemName {
+                color: vars.$text-primary;
+            }
+
+            .itemQuantity {
+                color: vars.$text-secondary;
+                font-size: 0.875rem;
+            }
+        }
+    }
+
+    .orderFooter {
+        @include mixins.flex_box_custom(space-between, center);
+        padding: vars.$spacing-md;
+        background: rgba(vars.$text-disabled, 0.05);
+
+        .orderDate {
+            font-size: 0.875rem;
+            color: vars.$text-secondary;
+        }
+
+        .orderTotal {
+            font-size: 1.125rem;
+            font-weight: 700;
+            color: vars.$text-primary;
+        }
+    }
+}
+

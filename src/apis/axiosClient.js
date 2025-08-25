@@ -1,11 +1,13 @@
 import axios from 'axios';
-//json-server --watch data.json --port 8888
+import { API_BASE_URL } from '@/constants/config';
+
+// json-server --watch data.json --port 8888
 const axiosClient = axios.create({
-    baseURL: 'http://localhost:8888', // ✅ Sửa lại thành URL backend thật
+    baseURL: API_BASE_URL,
     headers: {
-        'Content-Type': 'application/json',
+        'Content-Type': 'application/json'
     },
-    withCredentials: false, // nếu bạn dùng cookie để auth
+    withCredentials: false // nếu bạn dùng cookie để auth
 });
 
 // Request Interceptor: Gắn token nếu có

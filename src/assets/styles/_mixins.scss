@@ -1,11 +1,121 @@
-@mixin flex_box_custom($x,$y,$gap: 10px){
-  display: flex;
-  justify-content: $x;
-  align-items: $y;
-  gap: $gap;
+@import '_variables.scss';
 
+// Flexbox mixins
+@mixin flex_box_custom(
+    $justify: center,
+    $align: center,
+    $gap: 10px,
+    $direction: row
+) {
+    display: flex;
+    justify-content: $justify;
+    align-items: $align;
+    gap: $gap;
+    flex-direction: $direction;
 }
 
-@mixin radius_common ($radius:10px){
-  border-radius: $radius;
+@mixin flex_center {
+    @include flex_box_custom(center, center);
+}
+
+@mixin flex_between {
+    @include flex_box_custom(space-between, center);
+}
+
+@mixin flex_around {
+    @include flex_box_custom(space-around, center);
+}
+
+// Border radius mixins
+@mixin radius_common($radius: $border-radius-md) {
+    border-radius: $radius;
+}
+
+@mixin radius_top($radius: $border-radius-md) {
+    border-top-left-radius: $radius;
+    border-top-right-radius: $radius;
+}
+
+@mixin radius_bottom($radius: $border-radius-md) {
+    border-bottom-left-radius: $radius;
+    border-bottom-right-radius: $radius;
+}
+
+// Shadow mixins
+@mixin shadow($level: 'md') {
+    @if $level == 'sm' {
+        box-shadow: $shadow-sm;
+    } @else if $level == 'md' {
+        box-shadow: $shadow-md;
+    } @else if $level == 'lg' {
+        box-shadow: $shadow-lg;
+    }
+}
+
+// Transition mixins
+@mixin transition($properties: all, $duration: 0.3s, $timing: ease) {
+    transition: $properties $duration $timing;
+}
+
+// Button mixins
+@mixin button_base {
+    padding: $spacing-sm $spacing-md;
+    border: none;
+    @include radius_common($border-radius-sm);
+    @include transition();
+    cursor: pointer;
+    font-weight: 500;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: $spacing-xs;
+
+    &:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+    }
+}
+
+@mixin button_primary {
+    @include button_base;
+    background-color: $primary-color;
+    color: white;
+
+    &:hover:not(:disabled) {
+        background-color: $primary-dark;
+        transform: translateY(-1px);
+        @include shadow('md');
+    }
+}
+
+@mixin button_secondary {
+    @include button_base;
+    background-color: transparent;
+    color: $primary-color;
+    border: 1px solid $primary-color;
+
+    &:hover:not(:disabled) {
+        background-color: $primary-color;
+        color: white;
+    }
+}
+
+// Responsive mixins
+@mixin mobile {
+    @media (max-width: #{$breakpoint-sm - 1px}) {
+        @content;
+    }
+}
+
+@mixin tablet {
+    @media (min-width: #{$breakpoint-sm}) and (max-width: #{$breakpoint-md - 1px}) {
+        @content;
+    }
+}
+
+@mixin desktop {
+    @media (min-width: #{$breakpoint-md}) {
+        @content;
+    }
 }

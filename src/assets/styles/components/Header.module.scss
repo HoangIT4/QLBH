@@ -1,0 +1,232 @@
+@use '../variables' as vars;
+@use '../mixins' as mixins;
+
+.header {
+    width: 100%;
+    background: linear-gradient(135deg, vars.$primary-color 0%, vars.$primary-dark 100%);
+    color: white;
+    padding: vars.$spacing-md vars.$spacing-xl;
+    @include mixins.flex_between;
+    @include mixins.shadow('md');
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    backdrop-filter: blur(10px);
+
+    @include mixins.mobile {
+        padding: vars.$spacing-sm vars.$spacing-md;
+    }
+}
+
+.brand {
+    @include mixins.flex_box_custom(flex-start, center, vars.$spacing-sm);
+
+    .logo {
+        font-size: 1.8rem;
+        font-weight: 700;
+        cursor: pointer;
+        @include mixins.transition();
+
+        &:hover {
+            transform: scale(1.05);
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        @include mixins.mobile {
+            font-size: 1.5rem;
+        }
+    }
+
+    .subtitle {
+        font-size: 0.9rem;
+        color: rgba(255, 255, 255, 0.8);
+        font-weight: 300;
+
+        @include mixins.mobile {
+            display: none;
+        }
+    }
+}
+
+.navigation {
+    @include mixins.flex_box_custom(flex-end, center, vars.$spacing-md);
+
+    @include mixins.mobile {
+        gap: vars.$spacing-sm;
+    }
+}
+
+.navLink {
+    color: white;
+    text-decoration: none;
+    padding: vars.$spacing-sm vars.$spacing-md;
+    @include mixins.radius_common(vars.$border-radius-sm);
+    @include mixins.transition();
+    font-weight: 500;
+    position: relative;
+
+    &:hover {
+        background-color: rgba(255, 255, 255, 0.1);
+        transform: translateY(-1px);
+    }
+
+    &.active {
+        background-color: rgba(255, 255, 255, 0.15);
+
+        &::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80%;
+            height: 2px;
+            background-color: vars.$accent-color;
+            @include mixins.radius_common(1px);
+        }
+    }
+
+    @include mixins.mobile {
+        padding: vars.$spacing-xs vars.$spacing-sm;
+        font-size: 0.9rem;
+    }
+}
+
+.userSection {
+    @include mixins.flex_box_custom(flex-end, center, vars.$spacing-sm);
+
+    .userName {
+        font-size: 0.9rem;
+        color: rgba(255, 255, 255, 0.9);
+        font-weight: 500;
+
+        @include mixins.mobile {
+            display: none;
+        }
+    }
+
+    .avatar {
+        width: 36px;
+        height: 36px;
+        @include mixins.radius_common(50%);
+        background: linear-gradient(135deg, vars.$accent-color, vars.$secondary-color);
+        @include mixins.flex_center;
+        color: white;
+        font-weight: bold;
+        font-size: 0.9rem;
+        cursor: pointer;
+        @include mixins.transition();
+        @include mixins.shadow('sm');
+
+        &:hover {
+            transform: scale(1.1);
+            @include mixins.shadow('md');
+        }
+
+        @include mixins.mobile {
+            width: 32px;
+            height: 32px;
+            font-size: 0.8rem;
+        }
+    }
+}
+
+.authButtons {
+    @include mixins.flex_box_custom(flex-end, center, vars.$spacing-sm);
+}
+
+.loginBtn {
+    @include mixins.button_secondary;
+    color: white;
+    border-color: rgba(255, 255, 255, 0.3);
+
+    &:hover {
+        background-color: rgba(255, 255, 255, 0.1);
+        border-color: rgba(255, 255, 255, 0.5);
+        color: white;
+    }
+
+    @include mixins.mobile {
+        padding: vars.$spacing-xs vars.$spacing-sm;
+        font-size: 0.9rem;
+    }
+}
+
+.registerBtn {
+    @include mixins.button_base;
+    background-color: vars.$accent-color;
+    color: white;
+
+    &:hover {
+        background-color: darken(vars.$accent-color, 10%);
+        transform: translateY(-1px);
+        @include mixins.shadow('md');
+    }
+
+    @include mixins.mobile {
+        padding: vars.$spacing-xs vars.$spacing-sm;
+        font-size: 0.9rem;
+    }
+}
+
+.logoutBtn {
+    @include mixins.button_base;
+    background-color: transparent;
+    color: rgba(255, 255, 255, 0.8);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+
+    &:hover {
+        background-color: rgba(255, 255, 255, 0.1);
+        color: white;
+        border-color: rgba(255, 255, 255, 0.5);
+    }
+
+    @include mixins.mobile {
+        padding: vars.$spacing-xs vars.$spacing-sm;
+        font-size: 0.9rem;
+    }
+}
+
+// Dropdown menu
+.dropdown {
+    position: relative;
+
+    .dropdownMenu {
+        position: absolute;
+        top: 100%;
+        right: 0;
+        background: white;
+        @include mixins.shadow('lg');
+        @include mixins.radius_common(vars.$border-radius-md);
+        padding: vars.$spacing-sm 0;
+        min-width: 200px;
+        margin-top: vars.$spacing-xs;
+        z-index: 1001;
+
+        .dropdownItem {
+            display: block;
+            width: 100%;
+            padding: vars.$spacing-sm vars.$spacing-md;
+            color: vars.$text-primary;
+            text-decoration: none;
+            @include mixins.transition();
+            border: none;
+            background: none;
+            text-align: left;
+            cursor: pointer;
+
+            &:hover {
+                background-color: rgba(vars.$primary-color, 0.1);
+                color: vars.$primary-color;
+            }
+
+            &.danger {
+                color: vars.$error-color;
+
+                &:hover {
+                    background-color: rgba(vars.$error-color, 0.1);
+                }
+            }
+        }
+    }
+}
