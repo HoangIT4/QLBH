@@ -37,6 +37,14 @@ const allRouters = [
                 <EditProfilePage />
             </ProtectedRoute>
         )
+    },
+    {
+        path: '/admin/edit-profile',
+        element: (
+            <ProtectedRoute requiredRole='admin'>
+                <EditProfilePage />
+            </ProtectedRoute>
+        )
     }
 ];
 export default allRouters;

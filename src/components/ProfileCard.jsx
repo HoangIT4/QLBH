@@ -49,6 +49,15 @@ export default function ProfileCard({ user }) {
                     <p style={{ margin: 0, color: '#666', fontSize: '14px' }}>
                         {user.email || 'Chưa có email'}
                     </p>
+                    <p
+                        style={{
+                            margin: '2px 0 0 0',
+                            color: '#999',
+                            fontSize: '12px'
+                        }}
+                    >
+                        ID: {user.id || 'N/A'}
+                    </p>
                 </div>
             </div>
 

@@ -200,6 +200,35 @@
     }
 }
 
+.passwordSection {
+    margin-top: vars.$spacing-xl;
+    padding-top: vars.$spacing-lg;
+    border-top: 2px solid vars.$border-color;
+
+    h3 {
+        font-size: 1.25rem;
+        font-weight: 600;
+        color: vars.$text-primary;
+        margin-bottom: vars.$spacing-sm;
+    }
+
+    p {
+        color: vars.$text-secondary;
+        font-size: 0.9rem;
+        margin-bottom: vars.$spacing-lg;
+    }
+
+    .formGrid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: vars.$spacing-lg;
+
+        @include mixins.mobile {
+            grid-template-columns: 1fr;
+            gap: vars.$spacing-md;
+        }
+    }
+}
+
 .formActions {
     @include mixins.flex_box_custom(center, center, vars.$spacing-lg);
     padding-top: vars.$spacing-lg;

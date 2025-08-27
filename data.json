@@ -5,33 +5,45 @@
       "name": "Nguyễn Văn Admin",
       "username": "admin",
       "password": "123",
-      "role": "admin"
+      "role": "admin",
+      "fullName": "Nguyễn Văn Admin",
+      "email": "admin@qlbh.com",
+      "phone": "0901234567",
+      "address": "123 Đường ABC, Quận 1, TP.HCM",
+      "dateOfBirth": "1990-01-15",
+      "gender": "male",
+      "avatar": ""
     },
     {
       "id": "u2",
       "name": "Trần Thị Khách",
       "username": "user1",
       "password": "123",
-      "role": "user"
+      "role": "user",
+      "fullName": "Trần Thị Khách",
+      "email": "user1@qlbh.com",
+      "phone": "0968367560",
+      "address": "456 Đường XYZ, Quận 3, TP.HCM",
+      "dateOfBirth": "1995-03-20",
+      "gender": "female",
+      "avatar": ""
     },
     {
       "id": "u3",
       "name": "Lê Văn Người Mua",
       "username": "user2",
       "password": "123",
-      "role": "user"
+      "role": "user",
+      "fullName": "Lê Văn Người Mua",
+      "email": "user2@qlbh.com",
+      "phone": "0987654321",
+      "address": "789 Đường DEF, Quận 7, TP.HCM",
+      "dateOfBirth": "1988-07-10",
+      "gender": "male",
+      "avatar": ""
     }
   ],
   "products": [
-    {
-      "id": "p1",
-      "name": "Laptop Dell XPS 13",
-      "description": "Laptop mỏng nhẹ, hiệu năng cao, phù hợp cho dân văn phòng",
-      "price": 32000000,
-      "stock": 5,
-      "createdBy": "u1",
-      "createdAt": "2024-07-01T09:00:00.000Z"
-    },
     {
       "id": "p2",
       "name": "Điện thoại iPhone 15 Pro",
@@ -65,8 +77,14 @@
       "id": "o1",
       "userId": "u2",
       "items": [
-        { "productId": "p1", "quantity": 1 },
-        { "productId": "p3", "quantity": 2 }
+        {
+          "productId": "p1",
+          "quantity": 1
+        },
+        {
+          "productId": "p3",
+          "quantity": 2
+        }
       ],
       "status": "delivered",
       "createdAt": "2024-07-05T16:00:00.000Z"
@@ -75,7 +93,10 @@
       "id": "o2",
       "userId": "u3",
       "items": [
-        { "productId": "p2", "quantity": 1 }
+        {
+          "productId": "p2",
+          "quantity": 1
+        }
       ],
       "status": "pending",
       "createdAt": "2024-07-06T09:30:00.000Z"
@@ -84,7 +105,10 @@
       "id": "o3",
       "userId": "u2",
       "items": [
-        { "productId": "p4", "quantity": 1 }
+        {
+          "productId": "p4",
+          "quantity": 1
+        }
       ],
       "status": "cancelled",
       "createdAt": "2024-07-07T11:45:00.000Z"
@@ -93,7 +117,10 @@
       "id": "o4",
       "userId": "u3",
       "items": [
-        { "productId": "p3", "quantity": 3 }
+        {
+          "productId": "p3",
+          "quantity": 3
+        }
       ],
       "status": "delivered",
       "createdAt": "2024-07-08T15:20:00.000Z"

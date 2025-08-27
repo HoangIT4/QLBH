@@ -12,7 +12,9 @@ export default function EditProfilePage() {
         address: '',
         dateOfBirth: '',
         gender: '',
-        avatar: ''
+        avatar: '',
+        password: '',
+        confirmPassword: ''
     });
     const [isLoading, setIsLoading] = useState(false);
     const [message, setMessage] = useState({ type: '', text: '' });
@@ -33,18 +35,30 @@ export default function EditProfilePage() {
 
     const loadUserData = async (user) => {
         try {
-            // In real app, this would be an API call
-            // For now, we'll use mock data
-            const mockUserData = {
-                fullName: user.fullName || user.username || '',
-                email: user.email || '',
-                phone: user.phone || '',
-                address: user.address || '',
-                dateOfBirth: user.dateOfBirth || '',
-                gender: user.gender || '',
-                avatar: user.avatar || ''
+            // Load user data from data.json
+            const response = await fetch('/data.json');
+            const data = await response.json();
+
+            // Find user in data.json by id
+            const userFromData = data.users.find((u) => u.id === user.id);
+
+            const userData = {
+                fullName:
+                    userFromData?.fullName ||
+                    user.fullName ||
+                    user.username ||
+                    '',
+                email: userFromData?.email || user.email || '',
+                phone: userFromData?.phone || user.phone || '',
+                address: userFromData?.address || user.address || '',
+                dateOfBirth:
+                    userFromData?.dateOfBirth || user.dateOfBirth || '',
+                gender: userFromData?.gender || user.gender || '',
+                avatar: userFromData?.avatar || user.avatar || '',
+                password: '',
+                confirmPassword: ''
             };
-            setFormData(mockUserData);
+            setFormData(userData);
         } catch (error) {
             console.error('Error loading user data:', error);
             setMessage({
@@ -93,6 +107,16 @@ export default function EditProfilePage() {
                 throw new Error('Số điện thoại không hợp lệ');
             }
 
+            // Validate password if provided
+            if (formData.password) {
+                if (formData.password.length < 6) {
+                    throw new Error('Mật khẩu phải có ít nhất 6 ký tự');
+                }
+                if (formData.password !== formData.confirmPassword) {
+                    throw new Error('Mật khẩu xác nhận không khớp');
+                }
+            }
+
             // In real app, this would be an API call
             // Simulate API call
             await new Promise((resolve) => setTimeout(resolve, 1000));
@@ -100,19 +124,40 @@ export default function EditProfilePage() {
             // Update local storage
             const updatedUser = {
                 ...currentUser,
-                ...formData
+                fullName: formData.fullName,
+                email: formData.email,
+                phone: formData.phone,
+                address: formData.address,
+                dateOfBirth: formData.dateOfBirth,
+                gender: formData.gender,
+                avatar: formData.avatar
             };
+
+            // Only update password if provided
+            if (formData.password) {
+                updatedUser.password = formData.password;
+            }
+
+            // Update localStorage
             localStorage.setItem('currentUser', JSON.stringify(updatedUser));
             setCurrentUser(updatedUser);
+
+            // In real app, you would send this to your API
+            // For now, we'll just simulate the update
+            console.log('Updated user data:', updatedUser);
 
             setMessage({
                 type: 'success',
                 text: 'Cập nhật thông tin thành công!'
             });
 
-            // Redirect back to user page after 2 seconds
+            // Redirect back to appropriate page based on user role
             setTimeout(() => {
-                navigate('/user');
+                if (currentUser.role === 'admin') {
+                    navigate('/admin');
+                } else {
+                    navigate('/user');
+                }
             }, 2000);
         } catch (error) {
             setMessage({ type: 'error', text: error.message });
@@ -122,7 +167,11 @@ export default function EditProfilePage() {
     };
 
     const handleCancel = () => {
-        navigate('/user');
+        if (currentUser.role === 'admin') {
+            navigate('/admin');
+        } else {
+            navigate('/user');
+        }
     };
 
     if (!currentUser) {
@@ -254,6 +303,40 @@ export default function EditProfilePage() {
                                 placeholder='Nhập địa chỉ'
                                 rows='3'
                             />
+                        </div>
+                    </div>
+
+                    {/* Password Section */}
+                    <div className={styles.passwordSection}>
+                        <h3>Thay đổi mật khẩu</h3>
+                        <p>Để trống nếu không muốn thay đổi mật khẩu</p>
+
+                        <div className={styles.formGrid}>
+                            <div className={styles.formGroup}>
+                                <label htmlFor='password'>Mật khẩu mới</label>
+                                <input
+                                    type='password'
+                                    id='password'
+                                    name='password'
+                                    value={formData.password}
+                                    onChange={handleInputChange}
+                                    placeholder='Nhập mật khẩu mới (tối thiểu 6 ký tự)'
+                                />
+                            </div>
+
+                            <div className={styles.formGroup}>
+                                <label htmlFor='confirmPassword'>
+                                    Xác nhận mật khẩu
+                                </label>
+                                <input
+                                    type='password'
+                                    id='confirmPassword'
+                                    name='confirmPassword'
+                                    value={formData.confirmPassword}
+                                    onChange={handleInputChange}
+                                    placeholder='Nhập lại mật khẩu mới'
+                                />
+                            </div>
                         </div>
                     </div>
 

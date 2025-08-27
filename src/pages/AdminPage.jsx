@@ -1,6 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Layout from '@components/Layout';
+import AdminProfileCard from '@components/AdminProfileCard';
+import {
+    getProducts,
+    createProduct,
+    updateProduct,
+    deleteProduct
+} from '@apis/ApiProducts';
+import { getOrders, updateOrderStatus } from '@apis/ApiOrders';
+import { getUsers } from '@apis/ApiUser';
 
 export default function AdminPage() {
     const [currentUser, setCurrentUser] = useState(null);
@@ -28,46 +37,51 @@ export default function AdminPage() {
         setCurrentUser(user);
 
         // Load data
-        loadData();
+        void loadData();
     }, [navigate]);
 
     const loadData = async () => {
         try {
-            const response = await fetch('/data.json');
-            const data = await response.json();
-            setProducts(data.products);
-            setOrders(data.orders);
-            setUsers(data.users);
+            // Load data using API calls
+            const [productsData, ordersData, usersData] = await Promise.all([
+                getProducts(),
+                getOrders(),
+                getUsers()
+            ]);
+
+            setProducts(productsData);
+            setOrders(ordersData);
+            setUsers(usersData);
         } catch (error) {
             console.error('Error loading data:', error);
         }
     };
 
-    const handleLogout = () => {
-        localStorage.removeItem('currentUser');
-        navigate('/login');
-    };
-
-    const handleAddProduct = () => {
+    const handleAddProduct = async () => {
         if (!newProduct.name || !newProduct.price || !newProduct.stock) {
             alert('Vui lòng điền đầy đủ thông tin sản phẩm!');
             return;
         }
 
-        const product = {
-            id: `p${Date.now()}`,
-            name: newProduct.name,
-            description: newProduct.description,
-            price: parseInt(newProduct.price),
-            stock: parseInt(newProduct.stock),
-            createdBy: currentUser.id,
-            createdAt: new Date().toISOString()
-        };
+        try {
+            const productData = {
+                name: newProduct.name,
+                description: newProduct.description,
+                price: parseInt(newProduct.price),
+                stock: parseInt(newProduct.stock),
+                createdBy: currentUser.id,
+                createdAt: new Date().toISOString()
+            };
 
-        setProducts([...products, product]);
-        setNewProduct({ name: '', description: '', price: '', stock: '' });
-        setShowAddProduct(false);
-        alert('Thêm sản phẩm thành công!');
+            const newProductData = await createProduct(productData);
+            setProducts([...products, newProductData]);
+            setNewProduct({ name: '', description: '', price: '', stock: '' });
+            setShowAddProduct(false);
+            alert('Thêm sản phẩm thành công!');
+        } catch (error) {
+            console.error('Error adding product:', error);
+            alert('Có lỗi xảy ra khi thêm sản phẩm!');
+        }
     };
 
     const handleEditProduct = (product) => {
@@ -81,44 +95,69 @@ export default function AdminPage() {
         setShowAddProduct(true);
     };
 
-    const handleUpdateProduct = () => {
+    const handleUpdateProduct = async () => {
         if (!newProduct.name || !newProduct.price || !newProduct.stock) {
             alert('Vui lòng điền đầy đủ thông tin sản phẩm!');
             return;
         }
 
-        const updatedProducts = products.map((p) =>
-            p.id === editingProduct.id
-                ? {
-                      ...p,
-                      name: newProduct.name,
-                      description: newProduct.description,
-                      price: parseInt(newProduct.price),
-                      stock: parseInt(newProduct.stock)
-                  }
-                : p
-        );
+        try {
+            const productData = {
+                name: newProduct.name,
+                description: newProduct.description,
+                price: parseInt(newProduct.price),
+                stock: parseInt(newProduct.stock)
+            };
 
-        setProducts(updatedProducts);
-        setNewProduct({ name: '', description: '', price: '', stock: '' });
-        setShowAddProduct(false);
-        setEditingProduct(null);
-        alert('Cập nhật sản phẩm thành công!');
-    };
+            const updatedProductData = await updateProduct(
+                editingProduct.id,
+                productData
+            );
 
-    const handleDeleteProduct = (productId) => {
-        if (window.confirm('Bạn có chắc chắn muốn xóa sản phẩm này?')) {
-            setProducts(products.filter((p) => p.id !== productId));
-            alert('Xóa sản phẩm thành công!');
+            const updatedProducts = products.map((p) =>
+                p.id === editingProduct.id ? updatedProductData : p
+            );
+
+            setProducts(updatedProducts);
+            setNewProduct({ name: '', description: '', price: '', stock: '' });
+            setShowAddProduct(false);
+            setEditingProduct(null);
+            alert('Cập nhật sản phẩm thành công!');
+        } catch (error) {
+            console.error('Error updating product:', error);
+            alert('Có lỗi xảy ra khi cập nhật sản phẩm!');
         }
     };
 
-    const handleUpdateOrderStatus = (orderId, newStatus) => {
-        const updatedOrders = orders.map((order) =>
-            order.id === orderId ? { ...order, status: newStatus } : order
-        );
-        setOrders(updatedOrders);
-        alert(`Cập nhật trạng thái đơn hàng thành ${newStatus}!`);
+    const handleDeleteProduct = async (productId) => {
+        if (window.confirm('Bạn có chắc chắn muốn xóa sản phẩm này?')) {
+            try {
+                await deleteProduct(productId);
+                setProducts(products.filter((p) => p.id !== productId));
+                alert('Xóa sản phẩm thành công!');
+            } catch (error) {
+                console.error('Error deleting product:', error);
+                alert('Có lỗi xảy ra khi xóa sản phẩm!');
+            }
+        }
+    };
+
+    const handleUpdateOrderStatus = async (orderId, newStatus) => {
+        try {
+            const updatedOrderData = await updateOrderStatus(
+                orderId,
+                newStatus
+            );
+
+            const updatedOrders = orders.map((order) =>
+                order.id === orderId ? updatedOrderData : order
+            );
+            setOrders(updatedOrders);
+            alert(`Cập nhật trạng thái đơn hàng thành ${newStatus}!`);
+        } catch (error) {
+            console.error('Error updating order status:', error);
+            alert('Có lỗi xảy ra khi cập nhật trạng thái đơn hàng!');
+        }
     };
 
     const getOrderTotal = (order) => {
@@ -154,23 +193,30 @@ export default function AdminPage() {
                     }}
                 >
                     <h1>Trang Quản Trị</h1>
-                    {/*<div>*/}
-                    {/*    <span>Xin chào, {currentUser.name} | </span>*/}
-                    {/*    <button*/}
-                    {/*        onClick={handleLogout}*/}
-                    {/*        style={{*/}
-                    {/*            background: '#dc3545',*/}
-                    {/*            color: 'white',*/}
-                    {/*            border: 'none',*/}
-                    {/*            padding: '8px 16px',*/}
-                    {/*            borderRadius: '4px',*/}
-                    {/*            cursor: 'pointer'*/}
-                    {/*        }}*/}
-                    {/*    >*/}
-                    {/*        Đăng xuất*/}
-                    {/*    </button>*/}
-                    {/*</div>*/}
+                    <div
+                        style={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '15px'
+                        }}
+                    >
+                        <button
+                            onClick={() => navigate('/admin/edit-profile')}
+                            style={{
+                                background: '#6c757d',
+                                color: 'white',
+                                border: 'none',
+                                padding: '10px 15px',
+                                borderRadius: '4px',
+                                cursor: 'pointer',
+                                fontSize: '14px'
+                            }}
+                        >
+                            👤 Chỉnh sửa thông tin
+                        </button>
+                    </div>
                 </div>
+
 
                 {/* Tab Navigation */}
                 <div
