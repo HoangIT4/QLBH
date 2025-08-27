@@ -2,6 +2,7 @@ import HomePage from '@pages/HomePage';
 import LoginPage from '@pages/LoginPage';
 import AdminPage from '@pages/AdminPage';
 import UserPage from '@pages/UserPage';
+import EditProfilePage from '@pages/EditProfilePage';
 import ProtectedRoute from '@components/ProtectedRoute';
 
 const allRouters = [
@@ -26,6 +27,14 @@ const allRouters = [
         element: (
             <ProtectedRoute requiredRole='user'>
                 <UserPage />
+            </ProtectedRoute>
+        )
+    },
+    {
+        path: '/user/edit-profile',
+        element: (
+            <ProtectedRoute requiredRole='user'>
+                <EditProfilePage />
             </ProtectedRoute>
         )
     }

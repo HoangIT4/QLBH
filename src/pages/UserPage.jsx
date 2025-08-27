@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Layout from '@components/Layout';
+import ProfileCard from '@components/ProfileCard';
 
 export default function UserPage() {
     const [currentUser, setCurrentUser] = useState(null);
@@ -39,11 +40,6 @@ export default function UserPage() {
         } catch (error) {
             console.error('Error loading data:', error);
         }
-    };
-
-    const handleLogout = () => {
-        localStorage.removeItem('currentUser');
-        navigate('/login');
     };
 
     const addToCart = (product) => {
@@ -158,6 +154,20 @@ export default function UserPage() {
                         }}
                     >
                         <button
+                            onClick={() => navigate('/user/edit-profile')}
+                            style={{
+                                background: '#6c757d',
+                                color: 'white',
+                                border: 'none',
+                                padding: '10px 15px',
+                                borderRadius: '4px',
+                                cursor: 'pointer',
+                                fontSize: '14px'
+                            }}
+                        >
+                            👤 Chỉnh sửa thông tin
+                        </button>
+                        <button
                             onClick={() => setShowCart(true)}
                             style={{
                                 background: '#28a745',
@@ -171,22 +181,6 @@ export default function UserPage() {
                         >
                             🛒 Giỏ hàng ({cart.length})
                         </button>
-                        <div>
-                            <span>Xin chào, {currentUser.name} | </span>
-                            <button
-                                onClick={handleLogout}
-                                style={{
-                                    background: '#dc3545',
-                                    color: 'white',
-                                    border: 'none',
-                                    padding: '8px 16px',
-                                    borderRadius: '4px',
-                                    cursor: 'pointer'
-                                }}
-                            >
-                                Đăng xuất
-                            </button>
-                        </div>
                     </div>
                 </div>
 
@@ -495,8 +489,10 @@ export default function UserPage() {
                                     style={{
                                         background: 'none',
                                         border: 'none',
+                                        color: 'black',
                                         fontSize: '24px',
-                                        cursor: 'pointer'
+                                        cursor: 'pointer',
+                                        padding: '5px'
                                     }}
                                 >
                                     ×

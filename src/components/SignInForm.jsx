@@ -94,21 +94,7 @@ export default function SignInForm() {
                     onChange={handleChange}
                     required
                 />
-                <div
-                    style={{
-                        fontSize: '12px',
-                        margin: '10px 0',
-                        color: '#666'
-                    }}
-                >
-                    <p>Tài khoản demo:</p>
-                    <p>
-                        <strong>Admin:</strong> admin / 123
-                    </p>
-                    <p>
-                        <strong>User:</strong> user1 / 123
-                    </p>
-                </div>
+
                 <button type='submit'>Đăng nhập</button>
             </form>
         </div>

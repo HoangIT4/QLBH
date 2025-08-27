@@ -1,13 +1,13 @@
 {
-  "compilerOptions": {
-    "baseUrl": "src",
-    "paths": {
-      "@components/*": ["components/*"],
-      "@pages/*": ["pages/*"],
-      "@styles/*": ["assets/styles/*"],
-      "@icons/*": ["assets/icons/*"]
-    }
-  },
-  "include": ["src"],
-  "exclude": ["node_modules", "dist"]
+    "compilerOptions": {
+        "baseUrl": "src",
+        "paths": {
+            "@components/*": ["components/*"],
+            "@pages/*": ["pages/*"],
+            "@styles/*": ["assets/styles/*"],
+            "@icons/*": ["assets/icons/*"]
+        }
+    },
+    "include": ["src"],
+    "exclude": ["node_modules", "dist"]
 }

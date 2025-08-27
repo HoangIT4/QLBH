@@ -154,22 +154,22 @@ export default function AdminPage() {
                     }}
                 >
                     <h1>Trang Quản Trị</h1>
-                    <div>
-                        <span>Xin chào, {currentUser.name} | </span>
-                        <button
-                            onClick={handleLogout}
-                            style={{
-                                background: '#dc3545',
-                                color: 'white',
-                                border: 'none',
-                                padding: '8px 16px',
-                                borderRadius: '4px',
-                                cursor: 'pointer'
-                            }}
-                        >
-                            Đăng xuất
-                        </button>
-                    </div>
+                    {/*<div>*/}
+                    {/*    <span>Xin chào, {currentUser.name} | </span>*/}
+                    {/*    <button*/}
+                    {/*        onClick={handleLogout}*/}
+                    {/*        style={{*/}
+                    {/*            background: '#dc3545',*/}
+                    {/*            color: 'white',*/}
+                    {/*            border: 'none',*/}
+                    {/*            padding: '8px 16px',*/}
+                    {/*            borderRadius: '4px',*/}
+                    {/*            cursor: 'pointer'*/}
+                    {/*        }}*/}
+                    {/*    >*/}
+                    {/*        Đăng xuất*/}
+                    {/*    </button>*/}
+                    {/*</div>*/}
                 </div>
 
                 {/* Tab Navigation */}
